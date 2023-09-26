@@ -28,18 +28,19 @@ def joystick_drive():
         vr_axis = controller.axis2.position() # Vertical Right Joystick (percentage -100 to 100) 100
         vl_axis = controller.axis3.position() # Vertical Left Joystick (percentage -100 to 100)
         hl_axis = controller.axis4.position() # Horizantal Left Joystick (percentage -100 to 100)
+
+        # Adjust turning
+        hl_axis = hl_axis * 0.5
     
         # Calculate rotational power for left and right motors
-        max = abs(hr_axis) + abs(vr_axis)
+        max = abs(hl_axis) + abs(vr_axis)
         if max < 100:
             max = 100
-        
+
         # Calculate power for left and right motors
-        left = vr_axis + hr_axis
-        right = vr_axis - hr_axis
-
-        print(f"Left Motor: {left}% | Right Motor: {right}%")
-
+        left = vr_axis + hl_axis
+        right = vr_axis - hl_axis
+        
         # Set power for left and right motors
         lmg.spin(FORWARD, left/max*100, PERCENT)
         rmg.spin(FORWARD, right/max*100, PERCENT)
